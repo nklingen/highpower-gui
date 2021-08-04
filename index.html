@@ -1,16 +1,149 @@
 <!DOCTYPE html>
 <html>
+  <!-- set the viewport of your page, which will give the browser instructions on how to control the page's dimensions and scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
     <meta charset="UTF-8">
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'">
-    <title>Hello World!</title>
+    <title>High Power Cabinet</title>
+
+    <!-- DYNAMIC SLIDER  VALUE -->
+    <script>
+      function show_value_1(x)
+      {
+      document.getElementById("slider_value_1").innerHTML=x + " Watts";
+      }
+      function show_value_2(x)
+      {
+      document.getElementById("slider_value_2").innerHTML=x + " Watts";
+      }
+      function show_value_3(x)
+      {
+      document.getElementById("slider_value_3").innerHTML=x + " Watts";
+      }
+      function show_value_4(x)
+      {
+      document.getElementById("slider_value_4").innerHTML=x + " Watts";
+      }
+    </script>
+
+    <style>
+      .button {
+        
+        background-color: rgb(97, 119, 159);
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+
+      .row{
+        display: flex;
+      }
+      
+      </style>
+
   </head>
-  <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>,
-    Chromium <span id="chrome-version"></span>,
-    and Electron <span id="electron-version"></span>.
+  <body style="background-color:rgb(209, 209, 209);">
+    <center>
+      <h3 style="font-family:avenir;">High Power Cabinet developed for Guldager A/S by Staerkling Consulting</h3>
+    </center>
+      <br>
+    
+      <table width = "100%" border = "0">
+        <td width = "25%"></td>
+        <td height = "200" width = "50%">
+
+        <!-- CABINET 1 -->
+        <h2 style="font-family:avenir;">Cabinet 1</h2>
+        <button type="button" class="button" id="myBtn">None</button>
+        <button type="button" class="button">1 Thread</button>
+        <button type="button" class="button">2 Thread</button>
+
+        <div class="slidecontainer">
+          <span id="slider_value_1" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
+          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_1(this.value);">
+        </div>
+
+        <!-- CABINET 2 -->
+        <h2 style="font-family:avenir;">Cabinet 2</h2>
+        <button type="button" class="button" id="myBtn">None</button>
+        <button type="button" class="button">1 Thread</button>
+        <button type="button" class="button">2 Thread</button>
+
+        <div class="slidecontainer">
+          <span id="slider_value_2" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
+          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_2(this.value);">
+        </div>
+
+        <!-- CABINET 3 -->
+        <h2 style="font-family:avenir;">Cabinet 3</h2>
+        <button type="button" class="button" id="myBtn">None</button>
+        <button type="button" class="button">1 Thread</button>
+        <button type="button" class="button">2 Thread</button>
+
+        <div class="slidecontainer">
+          <span id="slider_value_3" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
+          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_3(this.value);">
+        </div>
+
+        <!-- CABINET 4 -->
+        <h2 style="font-family:avenir;">Cabinet 4</h2>
+        <button type="button" class="button" id="myBtn">None</button>
+        <button type="button" class="button">1 Thread</button>
+        <button type="button" class="button">2 Thread</button>
+
+        <div class="slidecontainer">
+          <span id="slider_value_4" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
+          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_4(this.value);">
+        </div>
+        </td> 
+      <td width = "25%"></td>
+    </table>
+      <br>
+      <br>
+      <br>
+      <br>
+      <img src = "logo.png" width="70" height="70" />
+
+    
+
+
+    <!-- SLIDER STYLE -->
+    <style>
+      .slidecontainer {
+        width: 100%;
+      }
+      
+      .slider {
+        -webkit-appearance: none;
+        width:100%;
+        height: 15px;
+        border-radius: 5px;   
+        background:white;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+      
+      
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: rgba(97, 119, 159, 1);
+        cursor: pointer;
+      }
+      
+      </style>
+      
   </body>
 </html>
+
