@@ -18,5 +18,8 @@
   "homepage": "https://github.com/nklingen/highpower-gui#readme",
   "devDependencies": {
     "electron": "^13.1.8"
+  },
+  "dependencies": {
+    "python-shell": "^3.0.0"
   }
 }
