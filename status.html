@@ -26,36 +26,20 @@
       function load() {
         for (let i = 1; i <= 4; i++) {
 
-          if (window.localStorage.getItem("C"+i+"thread")!="myBtnNone") {
+          if (window.localStorage.getItem("C"+i+"Switch")!="false") {
           document.getElementById(i+"mV").innerHTML = window.localStorage.getItem("C"+i+"mV")+" mV";
           document.getElementById(i+"target").innerHTML = "Target: "+window.localStorage.getItem("C"+i+"mV")+" mV";
-          }
+          document.getElementById("box"+i).className = "box-green";  
+        }
 
           else {
             document.getElementById(i+"mV").innerHTML = "N/A"
             document.getElementById(i+"target").innerHTML = ""
+            document.getElementById("box"+i).className = "box-grey";  
           }
         }
               }
 
-
-      function disableButton(b,c) {
-      //c indicates which cabinet, b indicates which button
-
-      //Make all buttons on that row not disabled
-      document.getElementById(c+"myBtnNone").disabled = false;
-      document.getElementById(c+"myBtn1").disabled = false;
-      document.getElementById(c+"myBtn2").disabled = false;
-
-      document.getElementById(c+"myBtnNone").className = "button";
-      document.getElementById(c+"myBtn1").className = "button";
-      document.getElementById(c+"myBtn2").className = "button";
-
-      //Make the picked button diabled
-      document.getElementById(c+b).disabled = true;
-      document.getElementById(c+b).className = "make-background-grey";
-      document.getElementById("p1").innerHTML = "New text!"+Math.random();
-    }
 
     window.onload = load;
     </script>
@@ -121,10 +105,22 @@
         cursor: pointer;
         }
 
-        .box
+        .box-green
         { 
         width: auto;
         background:rgb(150, 194, 169);
+        border-style: groove;
+        text-align: center; 
+        margin-left: 10px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        padding: 1.5%;
+        
+        } 
+        .box-grey
+        { 
+        width: auto;
+        background:rgb(152, 151, 151);
         border-style: groove;
         text-align: center; 
         margin-left: 10px;
@@ -158,7 +154,7 @@
           <div>
             <div class="container">
                 <div class="row" id="0">
-                    <div class="box">
+                    <div class="box-green" id="box1">
                         <a class="cabinetFont">Gruppe 1</a>
                         <br>
                       <a id="1mV">N/A</a>
@@ -167,7 +163,7 @@
 
                 
                     </div>
-                    <div class = "box">
+                    <div class = "box-green" id="box2">
                         <a class="cabinetFont">Gruppe 2</a>
                         <br>
                       <a id="2mV">N/A</a>
@@ -175,7 +171,7 @@
                       <a id="2target">N/A</a>
 
                     </div>
-                    <div class = "box">
+                    <div class = "box-green" id="box3">
                       <a class="cabinetFont">Gruppe 3</a>
                       <br>
                       <a id="3mV">N/A</a>
@@ -184,7 +180,7 @@
 
           
                   </div>
-                  <div class = "box">
+                  <div class = "box-green" id="box4">
                     <a class="cabinetFont">Gruppe 4</a>
                       <br>
                       <a id="4mV">N/A</a>
@@ -220,36 +216,7 @@
     
 
 
-    <!-- SLIDER STYLE -->
-    <style>
-      .slidecontainer {
-        width: 100%;
-      }
-      
-      .slider {
-        -webkit-appearance: none;
-        width:455px;
-        height: 15px;
-        border-radius: 5px;   
-        background:white;
-        outline: none;
-        opacity: 0.7;
-        -webkit-transition: .2s;
-        transition: opacity .2s;
-      }
-      
-      
-      .slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        background: rgba(97, 119, 159, 1);
-        cursor: pointer;
-      }
-      
-      </style>
+
       
   </body>
 </html>
