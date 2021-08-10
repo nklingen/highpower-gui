@@ -28,6 +28,9 @@
         switchOff(2,window.localStorage.getItem("C2Switch"));
         switchOff(3,window.localStorage.getItem("C3Switch"));
         switchOff(4,window.localStorage.getItem("C3Switch"));
+
+      
+
         
       }
 
@@ -46,8 +49,9 @@
 
       function show_value(x,c)
       {
-      storemV(c,x);
-      document.getElementById("slider_value_"+c).innerHTML=Math.round(x / 50)*50 + " mV";
+      const value = Math.round(x / 50)*50
+      storemV(c,value);
+      document.getElementById("slider_value_"+c).innerHTML=value + " mV";
       document.getElementById("myRange"+c).value=x;
       
       }
@@ -56,8 +60,8 @@
         document.getElementById("p1").innerHTML = value;
         if (value=="false") {
         
-          document.getElementById("p1").innerHTML = 1;
-        document.getElementById("switch"+c).checked == false;
+        document.getElementById("p1").innerHTML = 1;
+        document.getElementById("switch"+c).checked = false;
         disableButton(c);
         
         
@@ -65,7 +69,7 @@
         else {
           
           document.getElementById("p1").innerHTML = "2";
-          document.getElementById("switch"+c).checked == true;
+          document.getElementById("switch"+c).checked = true;
         }
         
 
@@ -75,6 +79,7 @@
     
       function disableButton(c) {
 
+
       
       //c indicates which cabinet
       //Make all buttons and sliders on that row not disabled
@@ -83,6 +88,7 @@
       
       var currentvalue = document.getElementById("myRange"+c).value;
       elemchecked = document.getElementById("switch"+c).checked;
+      document.getElementById("myRange"+c).disabled = false;
       
       
 
@@ -176,13 +182,14 @@
 
         <p id="p1">Hello World!</p>
 
-        
+       
         <h3 style="font-family:avenir;">Gruppe 1</h3>
         <!-- Rounded switch -->
         <label class="switch">
           <input type="checkbox" id="switch1" onclick="disableButton(1);">
           <span class="sliderswitch round"></span>
         </label>
+      
 
         <br>
         <br>
@@ -275,6 +282,8 @@
         opacity: 0.7;
         -webkit-transition: .2s;
         transition: opacity .2s;
+
+    
       }
       
       
