@@ -24,10 +24,10 @@
         show_value(window.localStorage.getItem("C"+3+"mV"),3);
         show_value(window.localStorage.getItem("C"+4+"mV"),4);
 
-        disableButton(window.localStorage.getItem("C"+1+"thread"),1);
-        disableButton(window.localStorage.getItem("C"+2+"thread"),2);
-        disableButton(window.localStorage.getItem("C"+3+"thread"),3);
-        disableButton(window.localStorage.getItem("C"+4+"thread"),4);
+        switchOff(1,window.localStorage.getItem("C1Switch"));
+        switchOff(2,window.localStorage.getItem("C2Switch"));
+        switchOff(3,window.localStorage.getItem("C3Switch"));
+        switchOff(4,window.localStorage.getItem("C3Switch"));
         
       }
 
@@ -52,20 +52,38 @@
       
       }
 
+      function switchOff(c,value) {
+        document.getElementById("p1").innerHTML = value;
+        if (value=="false") {
+        
+          document.getElementById("p1").innerHTML = 1;
+        document.getElementById("switch"+c).checked == false;
+        disableButton(c);
+        
+        
+      }
+        else {
+          
+          document.getElementById("p1").innerHTML = "2";
+          document.getElementById("switch"+c).checked == true;
+        }
+        
+
+      }
+
      
     
       function disableButton(c) {
 
-     
+      
       //c indicates which cabinet
       //Make all buttons and sliders on that row not disabled
-      document.getElementById("myRange"+c).disabled = false;
+     
       document.getElementById("myRange"+c).className  = "slider";
       
       var currentvalue = document.getElementById("myRange"+c).value;
-      document.getElementById("p1").innerHTML = window.localStorage.getItem("C"+c+"mV"); 
-      
       elemchecked = document.getElementById("switch"+c).checked;
+      
       
 
       if (!elemchecked) {
@@ -73,6 +91,10 @@
         document.getElementById("myRange"+c).value  = 0;
         document.getElementById("myRange"+c).className  = "sliderDisable";
         show_value(0,c);
+        window.localStorage.setItem("C"+c+"Switch", "false");
+      }
+      else {
+        window.localStorage.setItem("C"+c+"Switch", "true");
       }
       
     }
