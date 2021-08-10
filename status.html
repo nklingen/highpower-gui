@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+  <!-- set the viewport of your page, which will give the browser instructions on how to control the page's dimensions and scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8">
+    <title>High Power Cabinet</title>
+    <script type='text/javascript' src='toPython.js'></script>
+
+    <script>
+
+      function settings(){
+        //var currentvalue = document.getElementById("myRange"+c).value;
+        //document.getElementById("p1").innerHTML = currentvalue+" New text!"+Math.random(currentvalue);
+        document.getElementById("p1").innerHTML = "New text!"+Math.random();
+        document.getElementById("p1").innerHTML = window.localStorage.getItem("C"+1+"mV"); 
+        window.location.href = "Settings.html";
+      
+      } 
+      function stopProgram() {
+    //Stop Program;
+    killPython();
+    window.location.href = "index.html";
+}
+
+      function load() {
+        for (let i = 1; i <= 4; i++) {
+
+          if (window.localStorage.getItem("C"+i+"thread")!="myBtnNone") {
+          document.getElementById(i+"mV").innerHTML = window.localStorage.getItem("C"+i+"mV")+" mV";
+          document.getElementById(i+"target").innerHTML = "Target: "+window.localStorage.getItem("C"+i+"mV")+" mV";
+          }
+
+          else {
+            document.getElementById(i+"mV").innerHTML = "N/A"
+            document.getElementById(i+"target").innerHTML = ""
+          }
+        }
+              }
+
+
+      function disableButton(b,c) {
+      //c indicates which cabinet, b indicates which button
+
+      //Make all buttons on that row not disabled
+      document.getElementById(c+"myBtnNone").disabled = false;
+      document.getElementById(c+"myBtn1").disabled = false;
+      document.getElementById(c+"myBtn2").disabled = false;
+
+      document.getElementById(c+"myBtnNone").className = "button";
+      document.getElementById(c+"myBtn1").className = "button";
+      document.getElementById(c+"myBtn2").className = "button";
+
+      //Make the picked button diabled
+      document.getElementById(c+b).disabled = true;
+      document.getElementById(c+b).className = "make-background-grey";
+      document.getElementById("p1").innerHTML = "New text!"+Math.random();
+    }
+
+    window.onload = load;
+    </script>
+
+    <style>
+      .container{  
+      text-align: center; 
+      width: 500px; 
+     
+       
+      } 
+      .cabinetFont{  
+      font-size: 20px;
+      font-weight: bold;
+
+     
+       
+      } 
+      .button {
+        width:120px; 
+        height: 60px;
+        background-color: rgb(97, 119, 159);
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+       
+      .stopbutton {
+        width:120px; 
+        height: 60px;
+        background-color: rgb(223, 34, 34);
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+       
+      }
+
+      .row{
+        display: flex;
+      }
+
+      
+      .make-background-grey { 
+        background-color: grey;
+        border: none;
+        color: white;
+        padding: 15px 45px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        }
+
+        .box
+        { 
+        width: auto;
+        background:rgb(150, 194, 169);
+        border-style: groove;
+        text-align: center; 
+        margin-left: 10px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        padding: 1.5%;
+        
+        } 
+        
+  
+      </style>
+
+
+
+  </head>
+  <body style="background-color:rgb(209, 209, 209);">
+    <center>
+      <h2 style="font-family:avenir;">High Power Cabinet</h2>
+      <p style="font-family:avenir; margin:0; padding:0">developed for Guldager A/S by Staerkling Consulting</p>
+      <p style="font-family:avenir; margin:0; padding:0">contact Thomas Vartou for questions</p>
+    </center>
+      <br>
+    
+      <table width = "100%" border = "0">
+        <td width = "20%"></td>
+        <td height = "200" width = "60%">
+
+          <p id="p1">Hello World!</p>
+
+
+          <div>
+            <div class="container">
+                <div class="row" id="0">
+                    <div class="box">
+                        <a class="cabinetFont">Gruppe 1</a>
+                        <br>
+                      <a id="1mV">N/A</a>
+                      <br>
+                      <a id="1target">N/A</a>
+
+                
+                    </div>
+                    <div class = "box">
+                        <a class="cabinetFont">Gruppe 2</a>
+                        <br>
+                      <a id="2mV">N/A</a>
+                      <br>
+                      <a id="2target">N/A</a>
+
+                    </div>
+                    <div class = "box">
+                      <a class="cabinetFont">Gruppe 3</a>
+                      <br>
+                      <a id="3mV">N/A</a>
+                      <br>
+                      <a id="3target">N/A</a>
+
+          
+                  </div>
+                  <div class = "box">
+                    <a class="cabinetFont">Gruppe 4</a>
+                      <br>
+                      <a id="4mV">N/A</a>
+                      <br>
+                      <a id="4target">N/A</a>
+
+        
+                </div>
+                  
+                        
+                    </div>
+                </div>
+            </div>
+
+          <div class="container">
+        
+             <button type="button" class="stopbutton" onclick="stopProgram()" id="start">STOP</button>
+            
+
+            </div>
+
+
+
+        </td> 
+      <td width = "20%"></td>
+    </table>
+      <br>
+      <br>
+      <center>
+
+        <img src = "logo.png" width="70" height="70" />
+      </center>
+    
+
+
+    <!-- SLIDER STYLE -->
+    <style>
+      .slidecontainer {
+        width: 100%;
+      }
+      
+      .slider {
+        -webkit-appearance: none;
+        width:455px;
+        height: 15px;
+        border-radius: 5px;   
+        background:white;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+      
+      
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: rgba(97, 119, 159, 1);
+        cursor: pointer;
+      }
+      
+      </style>
+      
+  </body>
+</html>
+

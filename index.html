@@ -4,26 +4,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
     <meta charset="UTF-8">
-    <title>High Power Cabinet</title>
+    <title>High Power Gruppe</title>
+    
 
     <!-- DYNAMIC SLIDER  VALUE -->
+   
     <script>
-      function show_value_1(x)
-      {
-      document.getElementById("slider_value_1").innerHTML=x + " Watts";
+
+      
+
+      function test() {
+     
+        
+        //document.getElementById("p1").innerHTML = "New text!"+Math.random();
+   
+        //Load in last chosen values
+        show_value(window.localStorage.getItem("C"+1+"mV"),1);
+        show_value(window.localStorage.getItem("C"+2+"mV"),2);
+        show_value(window.localStorage.getItem("C"+3+"mV"),3);
+        show_value(window.localStorage.getItem("C"+4+"mV"),4);
+
+        disableButton(window.localStorage.getItem("C"+1+"thread"),1);
+        disableButton(window.localStorage.getItem("C"+2+"thread"),2);
+        disableButton(window.localStorage.getItem("C"+3+"thread"),3);
+        disableButton(window.localStorage.getItem("C"+4+"thread"),4);
+        
       }
-      function show_value_2(x)
-      {
-      document.getElementById("slider_value_2").innerHTML=x + " Watts";
+
+      function startProgram() {
+        document.getElementById("p1").innerHTML = "on";
+      //start program here
+      runPython();
+      window.location.href = "status.html";
+
+      
       }
-      function show_value_3(x)
-      {
-      document.getElementById("slider_value_3").innerHTML=x + " Watts";
+
+      function storemV(c,w) {
+        window.localStorage.setItem("C"+c+"mV", w);
       }
-      function show_value_4(x)
+
+      function show_value(x,c)
       {
-      document.getElementById("slider_value_4").innerHTML=x + " Watts";
+      storemV(c,x);
+      document.getElementById("slider_value_"+c).innerHTML=Math.round(x / 50)*50 + " mV";
+      document.getElementById("myRange"+c).value=x;
+      
       }
+
+     
+    
+      function disableButton(c) {
+
+     
+      //c indicates which cabinet
+      //Make all buttons and sliders on that row not disabled
+      document.getElementById("myRange"+c).disabled = false;
+      document.getElementById("myRange"+c).className  = "slider";
+      
+      var currentvalue = document.getElementById("myRange"+c).value;
+      document.getElementById("p1").innerHTML = window.localStorage.getItem("C"+c+"mV"); 
+      
+      elemchecked = document.getElementById("switch"+c).checked;
+      
+
+      if (!elemchecked) {
+        document.getElementById("myRange"+c).disabled = true;
+        document.getElementById("myRange"+c).value  = 0;
+        document.getElementById("myRange"+c).className  = "sliderDisable";
+        show_value(0,c);
+      }
+      
+    }
+
+    window.onload = test;
     </script>
 
     <style>
@@ -40,17 +94,53 @@
         margin: 4px 2px;
         cursor: pointer;
       }
+      .container{  
+      text-align: center; 
+      width: 455px; 
+     
+       
+      }  
+      .startbutton {
+        
+        background-color: rgb(77, 176, 45);
+        border: none;
+        color: white;
+        padding: 15px 45px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+   
+      }
 
       .row{
         display: flex;
       }
+
+      
+      .make-background-grey { 
+        background-color: grey;
+        border: none;
+        color: white;
+        padding: 15px 45px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        }
+      
+
       
       </style>
 
   </head>
   <body style="background-color:rgb(209, 209, 209);">
     <center>
-      <h2 style="font-family:avenir;">High Power Cabinet</h2>
+      <h2 style="font-family:avenir;">High Power Gruppe</h2>
       <p style="font-family:avenir; margin:0; padding:0">developed for Guldager A/S by Staerkling Consulting</p>
       <p style="font-family:avenir; margin:0; padding:0">contact Thomas Vartou for questions</p>
     </center>
@@ -59,50 +149,83 @@
       <table width = "100%" border = "0">
         <td width = "20%"></td>
         <td height = "200" width = "60%">
-
+        
         <!-- CABINET 1 -->
-        <h3 style="font-family:avenir;">Cabinet 1</h3>
-        <button type="button" class="button" id="myBtn">None</button>
-        <button type="button" class="button">1 Thread</button>
-        <button type="button" class="button">2 Thread</button>
 
+        <p id="p1">Hello World!</p>
+
+        
+        <h3 style="font-family:avenir;">Gruppe 1</h3>
+        <!-- Rounded switch -->
+        <label class="switch">
+          <input type="checkbox" id="switch1" onclick="disableButton(1);">
+          <span class="sliderswitch round"></span>
+        </label>
+
+        <br>
+        <br>
+     
         <div class="slidecontainer">
-          <span id="slider_value_1" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
-          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_1(this.value);">
+          <span id="slider_value_1" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+          <br>
+          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange1" oninput="show_value(this.value,1);">
         </div>
 
         <!-- CABINET 2 -->
-        <h3 style="font-family:avenir;">Cabinet 2</h3>
-        <button type="button" class="button" id="myBtn">None</button>
-        <button type="button" class="button">1 Thread</button>
-        <button type="button" class="button">2 Thread</button>
+        <h3 style="font-family:avenir;">Gruppe 2</h3>
+        <!-- Rounded switch -->
+        <label class="switch">
+          <input type="checkbox" id="switch2"  onclick="disableButton(2);">
+          <span class="sliderswitch round"></span>
+        </label> 
+        <br>
+        <br>
 
         <div class="slidecontainer">
-          <span id="slider_value_2" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
-          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_2(this.value);">
+          <span id="slider_value_2" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+          <br>
+          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange2" oninput="show_value(this.value,2);">
         </div>
 
         <!-- CABINET 3 -->
-        <h3 style="font-family:avenir;">Cabinet 3</h3>
-        <button type="button" class="button" id="myBtn">None</button>
-        <button type="button" class="button">1 Thread</button>
-        <button type="button" class="button">2 Thread</button>
+        <h3 style="font-family:avenir;">Gruppe 3</h3>
+        <!-- Rounded switch -->
+        <label class="switch">
+          <input type="checkbox" id="switch3" onclick="disableButton(3);">
+          <span class="sliderswitch round"></span>
+        </label>
+         <br>
+        <br>
+
 
         <div class="slidecontainer">
-          <span id="slider_value_3" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
-          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_3(this.value);">
+          <span id="slider_value_3" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+          <br>
+          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange3" oninput="show_value(this.value,3);">
         </div>
 
         <!-- CABINET 4 -->
-        <h3 style="font-family:avenir;">Cabinet 4</h3>
-        <button type="button" class="button" id="myBtn">None</button>
-        <button type="button" class="button">1 Thread</button>
-        <button type="button" class="button">2 Thread</button>
+        <h3 style="font-family:avenir;">Gruppe 4</h3>
+        <!-- Rounded switch -->
+        <label class="switch">
+          <input type="checkbox" id="switch4" onclick="disableButton(4);">
+          <span class="sliderswitch round"></span>
+        </label>
+        <br><br>
 
         <div class="slidecontainer">
-          <span id="slider_value_4" style="color:black; font-size:20px; font-family:avenir;">0 Watts</span>
-          <input type="range" min="0" max="15" value="0" class="slider" id="myRange" onchange="show_value_4(this.value);">
+          <span id="slider_value_4" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+          <br>
+          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange4" oninput="show_value(this.value,4);">
         </div>
+
+        <br><br>
+
+        <div class="container">
+        
+        <button onclick="startProgram()" type="button" class="startbutton" id="start">START</button>
+        </div>
+
         </td> 
       <td width = "20%"></td>
     </table>
@@ -122,7 +245,7 @@
       
       .slider {
         -webkit-appearance: none;
-        width:100%;
+        width:455px;
         height: 15px;
         border-radius: 5px;   
         background:white;
@@ -142,9 +265,103 @@
         background: rgba(97, 119, 159, 1);
         cursor: pointer;
       }
+
+      .sliderDisable {
+        -webkit-appearance: none;
+        width:455px;
+        height: 15px;
+        border-radius: 5px;   
+        background:white;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+
+      .sliderDisable::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: grey;
+        cursor: pointer;
+      }
+            /* The switch - the box around the slider */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      /* Hide default HTML checkbox */
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      /* The slider */
+      .sliderswitch {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      .sliderswitch:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      input:checked + .sliderswitch {
+        background-color: #2196F3;
+      }
+
+      input:focus + .sliderswitch {
+        box-shadow: 0 0 1px #2196F3;
+      }
+
+      input:checked + .sliderswitch:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Rounded sliders */
+      .sliderswitch.round {
+        border-radius: 34px;
+      }
+
+      .sliderswitch.round:before {
+        border-radius: 50%;
+      }
       
       </style>
+
+<script type='text/javascript' src='toPython.js'></script>
+<script>
+  window.api.receive("fromMain", (data) => {
+      console.log(`Received ${data} from main process`);
+  });
+  window.api.send("toMain", "some data");
+</script>
       
   </body>
+
+ 
 </html>
 
