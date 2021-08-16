@@ -3,11 +3,14 @@ const {PythonShell} = require('python-shell');
 const path = require('path')
 
 
-
 function createWindow () {
-  const win = new BrowserWindow({
+  win = new BrowserWindow({
+    
     width: 800,
     height: 600,
+    webPreferences: {
+      preload: path.join(app.getAppPath(), 'preload.js')
+  }
   })
 
   win.loadFile('index.html')
