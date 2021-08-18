@@ -17,17 +17,39 @@
         window.location.href = "Settings.html";
       
       } 
+      // OLINE 1: SPLITS csv INPUT INTO A VARIABLE FOR EACH CABINET
+      function parseTxt(text){
+        var val = text.split(',');
+        var cab1 = val[0];
+        var cab2 = val[1];
+        var cab3 = val[2];
+        var cab4 = val[3];
+        for (let i = 1; i <= 4; i++) {
+        if (window.localStorage.getItem("C"+i+"Switch")!="false") {
+          //document.getElementById(i+"mV").innerHTML = "loading..";
+          document.getElementById(i+"mV").innerHTML = cab1; 
+        }
+
+          
+        
+        }
+     
+         
+ 
+        
+      }
+
       function stopProgram() {
-    //Stop Program;
-    killPython();
-    window.location.href = "index.html";
-}
+        //Stop Program;
+        killPython();
+        window.location.href = "index.html";
+    }
 
       function load() {
         for (let i = 1; i <= 4; i++) {
 
           if (window.localStorage.getItem("C"+i+"Switch")!="false") {
-          document.getElementById(i+"mV").innerHTML = window.localStorage.getItem("C"+i+"mV")+" mV";
+          //document.getElementById(i+"mV").innerHTML = "loading..";
           document.getElementById(i+"target").innerHTML = "Target: "+window.localStorage.getItem("C"+i+"mV")+" mV";
           document.getElementById("box"+i).className = "box-green";  
         }
@@ -43,6 +65,21 @@
 
     window.onload = load;
     </script>
+
+
+      <!-- OLINE 2: we need jquery for ajax calls. I download it and import it locally -->
+      <script src="jquery-1.9.1.min.js"></script>
+
+
+      <!-- OLINE 3:i download the csv through an async call and then parse it -->
+      <script>
+          $.ajax({
+          type: "GET",
+          url: "values.csv",
+          dataType: "text",
+          success: parseTxt
+        });
+      </script>
 
     <style>
       .container{  
