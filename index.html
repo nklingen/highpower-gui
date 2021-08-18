@@ -3,6 +3,8 @@
   <!-- set the viewport of your page, which will give the browser instructions on how to control the page's dimensions and scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <head>
+
+    
     <meta charset="UTF-8">
     <title>High Power Gruppe</title>
     
@@ -15,7 +17,6 @@
 
       function test() {
      
-        
         //document.getElementById("p1").innerHTML = "New text!"+Math.random();
    
         //Load in last chosen values
@@ -27,11 +28,8 @@
         switchOff(1,window.localStorage.getItem("C1Switch"));
         switchOff(2,window.localStorage.getItem("C2Switch"));
         switchOff(3,window.localStorage.getItem("C3Switch"));
-        switchOff(4,window.localStorage.getItem("C3Switch"));
+        switchOff(4,window.localStorage.getItem("C4Switch"));
 
-      
-
-        
       }
 
       function startProgram() {
@@ -56,6 +54,17 @@
       
       }
 
+      // OLINE 1: SPLITS csv INPUT INTO A VARIABLE FOR EACH CABINET
+      function parseTxt(text){
+        var val = text.split(',');
+        var cab1 = val[0];
+        var cab2 = val[1];
+        var cab3 = val[2];
+        var cab4 = val[3];
+ 
+        document.getElementById("nat").innerHTML = cab3;
+      }
+
       function switchOff(c,value) {
         document.getElementById("p1").innerHTML = value;
         if (value=="false") {
@@ -78,30 +87,26 @@
      
     
       function disableButton(c) {
-
-
       
-      //c indicates which cabinet
-      //Make all buttons and sliders on that row not disabled
-     
-      document.getElementById("myRange"+c).className  = "slider";
-      
-      var currentvalue = document.getElementById("myRange"+c).value;
-      elemchecked = document.getElementById("switch"+c).checked;
-      document.getElementById("myRange"+c).disabled = false;
-      
+        //c indicates which cabinet
+        //Make all buttons and sliders on that row not disabled
       
 
-      if (!elemchecked) {
-        document.getElementById("myRange"+c).disabled = true;
-        document.getElementById("myRange"+c).value  = 0;
-        document.getElementById("myRange"+c).className  = "sliderDisable";
-        show_value(0,c);
-        window.localStorage.setItem("C"+c+"Switch", "false");
-      }
-      else {
-        window.localStorage.setItem("C"+c+"Switch", "true");
-      }
+        var currentvalue = document.getElementById("myRange"+c).value;
+        elemchecked = document.getElementById("switch"+c).checked;
+        document.getElementById("myRange"+c).disabled = false;
+        
+        document.getElementById("p1").innerHTML = c+" "+Math.random();
+
+        if (!elemchecked) {
+          document.getElementById("myRange"+c).disabled = true;
+          document.getElementById("myRange"+c).value  = 0;
+          show_value(0,c);
+          window.localStorage.setItem("C"+c+"Switch", "false");
+        }
+        else {
+          window.localStorage.setItem("C"+c+"Switch", "true");
+        }
       
     }
 
@@ -109,6 +114,19 @@
     </script>
 
     <style>
+
+      .column {
+          float: left;
+          width: 16%;
+      }
+
+      /* Clear floats after the columns */
+      .row:after {
+          content: "";
+          display: table;
+          clear: both;
+      }
+
       .button {
         
         background-color: rgb(97, 119, 159);
@@ -130,7 +148,6 @@
       }  
       .startbutton {
         
-        background-color: rgb(77, 176, 45);
         border: none;
         color: white;
         padding: 15px 45px;
@@ -166,6 +183,7 @@
       </style>
 
   </head>
+
   <body style="background-color:rgb(209, 209, 209);">
     <center>
       <h2 style="font-family:avenir;">High Power Gruppe</h2>
@@ -173,97 +191,122 @@
       <p style="font-family:avenir; margin:0; padding:0">contact Thomas Vartou for questions</p>
     </center>
       <br>
-    
+      <!-- OLINE 4: this is the element I update -->
+      <p id="nat">Demo</p>
+      <p id="p1">Demo</p>
+
+      <!-- OLINE 2: we need jquery for ajax calls. I download it and import it locally -->
+      <script src="jquery-1.9.1.min.js"></script>
+
+
+      <!-- OLINE 3:i download the csv through an async call and then parse it -->
+      <script>
+          $.ajax({
+          type: "GET",
+          url: "values.csv",
+          dataType: "text",
+          success: parseTxt
+        });
+      </script>
+
+      <div class="row">
+        
+        <!-- left spacing 16% -->
+        <div class="column"></div>
+
+
+
+        <!-- GROUP 1 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 1</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch1" onclick="disableButton(1);">
+              <span class="sliderswitch round"></span>
+            </label>
+
+            <div class="slidecontainer">
+              <span id="slider_value_1" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange1" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,1);">
+            </div>
+            
+          </center>
+        </div>
+
+        <!-- GROUP 2 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 2</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch2" onclick="disableButton(2);">
+              <span class="sliderswitch round"></span>
+            </label>
+            
+            <div class="slidecontainer">
+              <span id="slider_value_2" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange2" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,2);">
+            </div>
+            
+          </center>
+        </div>
+
+        <!-- GROUP 3 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 3</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch3" onclick="disableButton(3);">
+              <span class="sliderswitch round"></span>
+            </label>
+            
+            <div class="slidecontainer">
+              <span id="slider_value_3" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange3" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,3);">
+            </div>
+          </center>
+        </div>
+
+        <!-- GROUP 4 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 4</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch4" onclick="disableButton(4);">
+              <span class="sliderswitch round"></span>
+            </label>
+            
+            <div class="slidecontainer">
+              <span id="slider_value_4" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange4" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,4);">
+            </div>
+          </center>
+        </div>
+
+         <!-- right spacing 16% -->
+        <div class="column"></div>
+      </div>
+
+
+       <!-- START BUTTON -->
       <table width = "100%" border = "0">
         <td width = "20%"></td>
         <td height = "200" width = "60%">
-        
-        <!-- CABINET 1 -->
-
-        <p id="p1">Hello World!</p>
-
-       
-        <h3 style="font-family:avenir;">Gruppe 1</h3>
-        <!-- Rounded switch -->
-        <label class="switch">
-          <input type="checkbox" id="switch1" onclick="disableButton(1);">
-          <span class="sliderswitch round"></span>
-        </label>
-      
-
-        <br>
-        <br>
-     
-        <div class="slidecontainer">
-          <span id="slider_value_1" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
-          <br>
-          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange1" oninput="show_value(this.value,1);">
-        </div>
-
-        <!-- CABINET 2 -->
-        <h3 style="font-family:avenir;">Gruppe 2</h3>
-        <!-- Rounded switch -->
-        <label class="switch">
-          <input type="checkbox" id="switch2"  onclick="disableButton(2);">
-          <span class="sliderswitch round"></span>
-        </label> 
-        <br>
-        <br>
-
-        <div class="slidecontainer">
-          <span id="slider_value_2" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
-          <br>
-          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange2" oninput="show_value(this.value,2);">
-        </div>
-
-        <!-- CABINET 3 -->
-        <h3 style="font-family:avenir;">Gruppe 3</h3>
-        <!-- Rounded switch -->
-        <label class="switch">
-          <input type="checkbox" id="switch3" onclick="disableButton(3);">
-          <span class="sliderswitch round"></span>
-        </label>
-         <br>
-        <br>
-
-
-        <div class="slidecontainer">
-          <span id="slider_value_3" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
-          <br>
-          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange3" oninput="show_value(this.value,3);">
-        </div>
-
-        <!-- CABINET 4 -->
-        <h3 style="font-family:avenir;">Gruppe 4</h3>
-        <!-- Rounded switch -->
-        <label class="switch">
-          <input type="checkbox" id="switch4" onclick="disableButton(4);">
-          <span class="sliderswitch round"></span>
-        </label>
-        <br><br>
-
-        <div class="slidecontainer">
-          <span id="slider_value_4" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
-          <br>
-          <input type="range" min="-1600" max="-500" value="0" class="slider" id="myRange4" oninput="show_value(this.value,4);">
-        </div>
-
-        <br><br>
-
         <div class="container">
         
-        <button onclick="startProgram()" type="button" class="startbutton" id="start">START</button>
+        <button onclick="startProgram()" type="button" class="startbutton" id="start" style="background-color:#2196F3;">START</button>
         </div>
 
         </td> 
       <td width = "20%"></td>
     </table>
-      <br>
-      <br>
-      <center>
-        <img src = "logo.png" width="70" height="70" />
-      </center>
-    
 
 
     <!-- SLIDER STYLE -->
@@ -333,8 +376,9 @@
         height: 0;
       }
 
-      /* The slider */
-      .sliderswitch {
+     
+       /* The slider */
+       .sliderswitch {
         position: absolute;
         cursor: pointer;
         top: 0;
