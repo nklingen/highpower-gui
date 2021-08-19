@@ -33,7 +33,7 @@
       }
 
       function startProgram() {
-        document.getElementById("p1").innerHTML = "on";
+      //document.getElementById("p1").innerHTML = "on";
       //start program here
       runPython();
       window.location.href = "status.html";
@@ -62,14 +62,14 @@
         var cab3 = val[2];
         var cab4 = val[3];
  
-        document.getElementById("nat").innerHTML = cab3;
+        //document.getElementById("nat").innerHTML = cab3;
       }
 
       function switchOff(c,value) {
-        document.getElementById("p1").innerHTML = value;
+        //document.getElementById("p1").innerHTML = value;
         if (value=="false") {
         
-        document.getElementById("p1").innerHTML = 1;
+        //document.getElementById("p1").innerHTML = 1;
         document.getElementById("switch"+c).checked = false;
         disableButton(c);
         
@@ -77,7 +77,7 @@
       }
         else {
           
-          document.getElementById("p1").innerHTML = "2";
+          //document.getElementById("p1").innerHTML = "2";
           document.getElementById("switch"+c).checked = true;
         }
         
@@ -96,7 +96,7 @@
         elemchecked = document.getElementById("switch"+c).checked;
         document.getElementById("myRange"+c).disabled = false;
         
-        document.getElementById("p1").innerHTML = c+" "+Math.random();
+        //document.getElementById("p1").innerHTML = c+" "+Math.random();
 
         if (!elemchecked) {
           document.getElementById("myRange"+c).disabled = true;
@@ -192,8 +192,8 @@
     </center>
       <br>
       <!-- OLINE 4: this is the element I update -->
-      <p id="nat">Demo</p>
-      <p id="p1">Demo</p>
+      <!--<p id="nat">Demo</p>-->
+      <!--<p id="p1">Demo</p>-->
 
       <!-- OLINE 2: we need jquery for ajax calls. I download it and import it locally -->
       <script src="jquery-1.9.1.min.js"></script>

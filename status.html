@@ -12,22 +12,25 @@
       function settings(){
         //var currentvalue = document.getElementById("myRange"+c).value;
         //document.getElementById("p1").innerHTML = currentvalue+" New text!"+Math.random(currentvalue);
-        document.getElementById("p1").innerHTML = "New text!"+Math.random();
-        document.getElementById("p1").innerHTML = window.localStorage.getItem("C"+1+"mV"); 
         window.location.href = "Settings.html";
       
       } 
       // OLINE 1: SPLITS csv INPUT INTO A VARIABLE FOR EACH CABINET
       function parseTxt(text){
         var val = text.split(',');
-        var cab1 = val[0];
-        var cab2 = val[1];
-        var cab3 = val[2];
-        var cab4 = val[3];
+
         for (let i = 1; i <= 4; i++) {
         if (window.localStorage.getItem("C"+i+"Switch")!="false") {
           //document.getElementById(i+"mV").innerHTML = "loading..";
-          document.getElementById(i+"mV").innerHTML = cab1; 
+          document.getElementById(i+"mV").innerHTML = val[i-1]+" mV"; 
+          //document.getElementById("p1").innerHTML =parseInt(val[i-1]) 
+          if ((parseInt(val[i-1])>=parseInt(window.localStorage.getItem("C"+i+"mV"))-100) && (parseInt(val[i-1])<=parseInt(window.localStorage.getItem("C"+i+"mV"))+100)) {
+            
+            document.getElementById("box"+i).className = "box-green";  
+          }
+          else {
+            document.getElementById("box"+i).className = "box-red";  
+          }
         }
 
           
@@ -154,6 +157,18 @@
         padding: 1.5%;
         
         } 
+        .box-red
+        { 
+        width: auto;
+        background:rgb(197, 141, 141);
+        border-style: groove;
+        text-align: center; 
+        margin-left: 10px;
+        margin-bottom: 10px;
+        margin-top: 10px;
+        padding: 1.5%;
+        
+        } 
         .box-grey
         { 
         width: auto;
@@ -185,7 +200,7 @@
         <td width = "20%"></td>
         <td height = "200" width = "60%">
 
-          <p id="p1">Hello World!</p>
+          <!--<p id="p1>">Hello World!</p>-->
 
 
           <div>
