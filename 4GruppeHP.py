@@ -6,6 +6,7 @@ import busio
 import adafruit_ina260
 import pigpio
 import sys
+import csv
 
 def run(mv1,mv2,mv3,mv4):
 
@@ -160,11 +161,19 @@ def run(mv1,mv2,mv3,mv4):
         prev_log_state = log_state
         #_____________________________________________________________________________________________
         
-        # After 1000 loops print voltage of tank 1
+        # After 1000 loops update the csv file
         i = i + 1
-        if i == 10000:
+        if i == 1000:
+
             i = 0  
-            print(int(ina260_1.voltage*1000))
+            # open the file in the write mode
+            f = open('values.csv', 'w')
+            # create the csv writer
+            writer = csv.writer(f)
+            # write a row to the csv file
+            writer.writerow((int(ina260_1.voltage*1000),int(ina260_2.voltage*1000),int(ina260_3.voltage*1000),int(ina260_4.voltage*1000)))
+            # close the file
+            f.close()
 
 
 if __name__ == '__main__':
