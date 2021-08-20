@@ -6,8 +6,18 @@
     <meta charset="UTF-8">
     <title>High Power Cabinet</title>
     <script type='text/javascript' src='toPython.js'></script>
+    <script src="jquery-1.9.1.min.js"></script>
 
     <script>
+      $(document).ready(function() {
+        setInterval(function() {
+          refresh_csv()
+        }, 3000);
+      });
+      
+      function refresh_csv() {
+        window.location.reload(); 
+      }
 
       function settings(){
         //var currentvalue = document.getElementById("myRange"+c).value;
@@ -32,14 +42,7 @@
             document.getElementById("box"+i).className = "box-red";  
           }
         }
-
-          
-        
         }
-     
-         
- 
-        
       }
 
       function stopProgram() {
@@ -68,11 +71,6 @@
 
     window.onload = load;
     </script>
-
-
-      <!-- OLINE 2: we need jquery for ajax calls. I download it and import it locally -->
-      <script src="jquery-1.9.1.min.js"></script>
-
 
       <!-- OLINE 3:i download the csv through an async call and then parse it -->
       <script>

@@ -15,10 +15,10 @@ function createWindow () {
 
   win.loadFile('index.html')
 
-  var python = require('child_process').spawn('python', ['./send-cellular-message.py']);
-  python.stdout.on('data',function(data){
-      console.log("data: ",data.toString('utf8'));
-  });
+  // var python = require('child_process').spawn('python', ['./send-cellular-message.py']);
+  // python.stdout.on('data',function(data){
+  //     console.log("data: ",data.toString('utf8'));
+  // });
 
 }
 
