@@ -8,6 +8,20 @@ import pigpio
 import sys
 import csv
 
+
+def update_duty_cycle(duty_val, current_val, target_val):
+    if int(current_val) < int(target_val) :
+        duty_val += 0.01
+    elif int(current_val) > int(target_val) :
+        duty_val -= 0.01
+        
+    # Duty max is 100 and min is 0
+    if duty_val <= 0 :
+        duty_val = 0  
+    elif duty_val >= 100 :
+        duty_val = 100
+    return duty_val
+
 def run(mv1,mv2,mv3,mv4):
 
 
@@ -73,70 +87,24 @@ def run(mv1,mv2,mv3,mv4):
     Gruppe4 = GPIO.PWM(16, 1000)
     Gruppe4.start(duty4)
 
-
     #_____________________________________________________________________________________________
     # Tanks Are runnng
     while 1:
         
         # Group 1
-        # If voltage measurement is higer/lower than taget add/subtract from duty 
-        if int(ina260_1.voltage*1000) < int(tagtet_voltage1) :
-            duty1 = duty1 + 0.01
-        elif int(ina260_1.voltage*1000) > int(tagtet_voltage1) :
-            duty1 = duty1 - 0.01
-            
-        # Duty max is 100 and min is 0
-        if duty1 <= 0 :
-            duty1 = 0  
-        elif duty1 >= 100 :
-            duty1 = 100
-        
-        # Change duty
+        duty1 = update_duty_cycle(duty1, ina260_1.voltage*1000, tagtet_voltage1)
         Gruppe1.ChangeDutyCycle(duty1)
         
         # Group 2
-        if int(ina260_2.voltage*1000) < int(tagtet_voltage2) :
-            duty2 = duty2 + 0.01
-        elif int(ina260_2.voltage*1000) > int(tagtet_voltage2) :
-            duty2 = duty2 - 0.01
-            
-        # Duty max is 100 and min is 0
-        if duty2 <= 0 :
-            duty2 = 0  
-        elif duty2 >= 100 :
-            duty2 = 100
-        
-        # Change duty
+        duty2 = update_duty_cycle(duty2, ina260_2.voltage*1000, tagtet_voltage2)
         Gruppe2.ChangeDutyCycle(duty2)
         
         # Group 3
-        if int(ina260_3.voltage*1000) < int(tagtet_voltage3) :
-            duty3 = duty3 + 0.01
-        elif int(ina260_3.voltage*1000) > int(tagtet_voltage3) :
-            duty3 = duty3 - 0.01
-            
-        # Duty max is 100 and min is 0
-        if duty3 <= 0 :
-            duty3 = 0  
-        elif duty3 >= 100 :
-            duty3 = 100
-        
-        # Change duty
+        duty3 = update_duty_cycle(duty3, ina260_3.voltage*1000, tagtet_voltage3)
         Gruppe3.ChangeDutyCycle(duty3)
         
         # Group 4
-        if int(ina260_4.voltage*1000) < int(tagtet_voltage4) :
-            duty4 = duty4 + 0.01
-        elif int(ina260_4.voltage*1000) > int(tagtet_voltage4) :
-            duty4 = duty4 - 0.01
-            
-        # Duty max is 100 and min is 0
-        if duty4 <= 0 :
-            duty4 = 0  
-        elif duty4 >= 100 :
-            duty4 = 100
-        
-        # Change duty
+        duty4 = update_duty_cycle(duty4, ina260_4.voltage*1000, tagtet_voltage4)
         Gruppe4.ChangeDutyCycle(duty4)
 
         #______________________________________________________________________________________________
