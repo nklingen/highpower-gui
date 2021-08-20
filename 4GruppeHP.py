@@ -7,7 +7,7 @@ import adafruit_ina260
 import pigpio
 import sys
 import csv
-
+from collections import deque 
 
 def update_duty_cycle(duty_val, current_val, target_val):
     if int(current_val) < int(target_val) :
@@ -24,7 +24,10 @@ def update_duty_cycle(duty_val, current_val, target_val):
 
 def run(mv1,mv2,mv3,mv4):
 
-
+    queue1 = deque()
+    queue2 = deque()
+    queue3 = deque()
+    queue4 = deque()
     #test connection with screen
     # f = open("demofile2.txt", "a")
     # f.write(mv1)
@@ -113,7 +116,7 @@ def run(mv1,mv2,mv3,mv4):
     
         if ina260_1.voltage*1000 > int(tagtet_voltage1)-100 and ina260_1.voltage*1000 < int(tagtet_voltage1)+100 :
             log_state = 0
-        elif ina260_1.voltage*1000 < int(tagtet_voltage1)-100 or ina260_1.voltage*1000 > int(tagtet_voltage1)+100 :
+        else:
             log_state = 1
             
 
@@ -129,9 +132,28 @@ def run(mv1,mv2,mv3,mv4):
         prev_log_state = log_state
         #_____________________________________________________________________________________________
         
+        # update last 50 values
+        queue1.append(int(ina260_1.voltage))
+        queue2.append(int(ina260_2.voltage))
+        queue3.append(int(ina260_3.voltage))
+        queue4.append(int(ina260_4.voltage))
+
+        if len(queue1) > 50:
+            queue1.popleft() #O(1) performance
+            queue2.popleft() #O(1) performance
+            queue3.popleft() #O(1) performance
+            queue4.popleft() #O(1) performance
+
+
         # After 1000 loops update the csv file
         i = i + 1
         if i == 1000:
+            
+            avg_1 = sum(queue1)/50
+            avg_2 = sum(queue2)/50
+            avg_3 = sum(queue3)/50
+            avg_4 = sum(queue4)/50
+
 
             i = 0  
             # open the file in the write mode
@@ -139,11 +161,10 @@ def run(mv1,mv2,mv3,mv4):
             # create the csv writer
             writer = csv.writer(f)
             # write a row to the csv file
-            writer.writerow((int(ina260_1.voltage*1000),int(ina260_2.voltage*1000),int(ina260_3.voltage*1000),int(ina260_4.voltage*1000)))
+            writer.writerow((avg_1*1000), avg_2*1000,avg_3*1000,avg_4*1000))
             # close the file
             f.close()
 
 
 if __name__ == '__main__':
-    print("helloo")
     run(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
