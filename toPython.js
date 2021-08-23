@@ -4,10 +4,10 @@
 function runPython() {
     //document.getElementById("p1").innerHTML = "New text!"+Math.random();
 
-    mv_cabinet1 = window.localStorage.getItem("C1mV");
-    mv_cabinet2 = window.localStorage.getItem("C2mV");
-    mv_cabinet3 = window.localStorage.getItem("C3mV");
-    mv_cabinet4 = window.localStorage.getItem("C4mV");
+    let mv_cabinet1 = window.localStorage.getItem("C1mV");
+    let mv_cabinet2 = window.localStorage.getItem("C2mV");
+    let mv_cabinet3 = window.localStorage.getItem("C3mV");
+    let mv_cabinet4 = window.localStorage.getItem("C4mV");
     document.getElementById("p1").innerHTML = mv_cabinet1;
 
     
@@ -26,5 +26,7 @@ function runPython() {
 function killPython() {
     const PID = window.localStorage.getItem("PID");
     window.electron.killPython(PID);
+    const x = window.electron.killPythonHard().return;
+    
     //document.getElementById("p1").innerHTML = "killed";
 }

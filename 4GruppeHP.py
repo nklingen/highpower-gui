@@ -15,15 +15,15 @@ def water_switch(current_switch, target_val):
     return target_val
     
 def update_duty_cycle(duty_val, current_val, target_val):
-    if int(current_val) < int(target_val) :
+    if int(current_val) > int(target_val) :
         duty_val += 0.01
-    elif int(current_val) > int(target_val) :
+    elif int(current_val) < int(target_val) :
         duty_val -= 0.01
 
     # Duty max is 100 and min is 0
-    if duty_val <= 0  :
+    if duty_val >= 0  :
         duty_val = 0  
-    elif duty_val >= 100 :
+    elif duty_val <= 100 :
         duty_val = 100
     
     # If the target value has been changed to 0  immediately change duty to 0
