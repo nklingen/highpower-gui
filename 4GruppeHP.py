@@ -21,9 +21,17 @@ def update_duty_cycle(duty_val, current_val, target_val):
         duty_val -= 0.01
 
     # Duty max is 100 and min is 0
+<<<<<<< HEAD
     duty_val = max(0, duty_val)
     duty_val = min(100, duty_val)
 
+=======
+    if duty_val <= 0  :
+        duty_val = 0  
+    elif duty_val >= 100 :
+        duty_val = 100
+    
+>>>>>>> f0d2eba8bb8830a586d95e6df4bd70bd7f02984d
     # If the target value has been changed to 0  immediately change duty to 0
     if int(target_val) == 0 :
         duty_val = 0
