@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<script></script>
 <html>
   <!-- set the viewport of your page, which will give the browser instructions on how to control the page's dimensions and scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +17,17 @@
       });
       
       function refresh_csv() {
-        window.location.reload(); 
+        //window.location.reload(true); 
+
+        $.ajax({
+          type: "GET",
+          url: "values.csv",
+          dataType: "text",
+          success: parseTxt
+        });
+
+
+
       }
 
       function settings(){
@@ -28,6 +39,7 @@
       // OLINE 1: SPLITS csv INPUT INTO A VARIABLE FOR EACH CABINET
       function parseTxt(text){
         var val = text.split(',');
+        
 
         for (let i = 1; i <= 4; i++) {
         if (window.localStorage.getItem("C"+i+"Switch")!="false") {
@@ -202,12 +214,12 @@
 
 
           <div>
-            <div class="container">
+            <div class="container" id="container">
                 <div class="row" id="0">
                     <div class="box-green" id="box1">
                         <a class="cabinetFont">Gruppe 1</a>
                         <br>
-                      <a id="1mV">N/A</a>
+                      <p id="1mV">N/A</p>
                       <br>
                       <a id="1target">N/A</a>
 
