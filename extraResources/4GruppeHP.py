@@ -117,7 +117,7 @@ def run(mv1,mv2,mv3,mv4):
         
         j=j+4
 
-        f = open('values.csv', 'w')
+        f = open('../values.csv', 'w')
         # create the csv writer
         writer = csv.writer(f)
         # write a row to the csv file

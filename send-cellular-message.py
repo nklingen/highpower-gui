@@ -12,7 +12,6 @@ def run_network_disconnect():
     print("hello")
     print('Checking for existing PPP sessions')
     for proc in psutil.process_iter():
-
         try:
             pinfo = proc.as_dict(attrs=['pid', 'name'])
         except:

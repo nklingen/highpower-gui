@@ -1,5 +1,7 @@
 const { app, BrowserWindow } = require('electron')
 const {PythonShell} = require('python-shell');
+
+var AutoLaunch = require('auto-launch');
 const path = require('path')
 
 
@@ -8,6 +10,7 @@ function createWindow () {
     
     width: 800,
     height: 600,
+    fullscreen: true,
     webPreferences: {
       preload: path.join(app.getAppPath(), 'preload.js')
   }
@@ -15,11 +18,7 @@ function createWindow () {
 
   win.loadFile('index.html')
 
-  //--------  Start connection to cellular on seperate thread
-  // var python = require('child_process').spawn('python3', ['./send-cellular-message.py']);
-  // python.stdout.on('data',function(data){
-  //     console.log("data: ",data.toString('utf8'));
-  // });
+
 
 }
 
@@ -31,6 +30,21 @@ app.on('window-all-closed', function () {
 
 // Open a window if none are open (macOS)
 app.whenReady().then(() => {
+
+
+  var autoLauncher = new AutoLaunch({
+      name: "GUI"
+  });
+  // Checking if autoLaunch is enabled, if not then enabling it.
+  autoLauncher.isEnabled().then(function(isEnabled) {
+    if (isEnabled) return;
+    autoLauncher.enable();
+  }).catch(function (err) {
+    throw err;
+  });
+
+
+  
   createWindow()
 
   app.on('activate', function () {
