@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+  <!-- set the viewport of your page, which will give the browser instructions on how to control the page's dimensions and scaling. -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+
+    
+    <meta charset="UTF-8">
+    <title>High Power Gruppe</title>
+ 
+    
+
+    <!-- DYNAMIC SLIDER  VALUE -->
+   
+    <script>
+      
+
+      
+
+      function test() {
+
+  
+
+     
+        //document.getElementById("p1").innerHTML = "New text!"+Math.random();
+   
+        //Load in last chosen values
+        show_value(window.localStorage.getItem("C"+1+"mV"),1);
+        show_value(window.localStorage.getItem("C"+2+"mV"),2);
+        show_value(window.localStorage.getItem("C"+3+"mV"),3);
+        show_value(window.localStorage.getItem("C"+4+"mV"),4);
+
+        switchOff(1,window.localStorage.getItem("C1Switch"));
+        switchOff(2,window.localStorage.getItem("C2Switch"));
+        switchOff(3,window.localStorage.getItem("C3Switch"));
+        switchOff(4,window.localStorage.getItem("C4Switch"));
+
+
+        
+
+      }
+
+      function startProgram() {
+      
+      //start program here
+
+      let mv_cabinet1 = window.localStorage.getItem("C1mV");
+      let mv_cabinet2 = window.localStorage.getItem("C2mV");
+      let mv_cabinet3 = window.localStorage.getItem("C3mV");
+      let mv_cabinet4 = window.localStorage.getItem("C4mV");
+  
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://0.0.0.0:5001/StartPython");
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({
+          "gruppe1": mv_cabinet1,
+          "gruppe2": mv_cabinet2,
+          "gruppe3": mv_cabinet3,
+          "gruppe4": mv_cabinet4,
+          
+      }));
+      
+      
+      window.location.href = "status.html";
+
+      
+      }
+
+      function storemV(c,w) {
+        window.localStorage.setItem("C"+c+"mV", w);
+      }
+
+      function show_value(x,c)
+      {
+      const value = Math.round(x / 50)*50
+      storemV(c,value);
+      document.getElementById("slider_value_"+c).innerHTML=value + " mV";
+      document.getElementById("myRange"+c).value=x;
+      
+      }
+
+      // OLINE 1: SPLITS csv INPUT INTO A VARIABLE FOR EACH CABINET
+      function parseTxt(text){
+        var val = text.split(',');
+        var cab1 = val[0];
+        var cab2 = val[1];
+        var cab3 = val[2];
+        var cab4 = val[3];
+ 
+        //document.getElementById("nat").innerHTML = cab3;
+      }
+
+      function switchOff(c,value) {
+        //document.getElementById("p1").innerHTML = value;
+        if (value=="false") {
+        
+        //document.getElementById("p1").innerHTML = 1;
+        document.getElementById("switch"+c).checked = false;
+        disableButton(c);
+        
+        
+      }
+        else {
+          
+          //document.getElementById("p1").innerHTML = "2";
+          document.getElementById("switch"+c).checked = true;
+        }
+        
+
+      }
+
+     
+    
+      function disableButton(c) {
+      
+        //c indicates which cabinet
+        //Make all buttons and sliders on that row not disabled
+      
+
+        var currentvalue = document.getElementById("myRange"+c).value;
+        elemchecked = document.getElementById("switch"+c).checked;
+        document.getElementById("myRange"+c).disabled = false;
+        
+        //document.getElementById("p1").innerHTML = c+" "+Math.random();
+
+        if (!elemchecked) {
+          document.getElementById("myRange"+c).disabled = true;
+          document.getElementById("myRange"+c).value  = 0;
+          show_value(0,c);
+          window.localStorage.setItem("C"+c+"Switch", "false");
+        }
+        else {
+          window.localStorage.setItem("C"+c+"Switch", "true");
+        }
+      
+    }
+
+    window.onload = test;
+    </script>
+
+    <style>
+
+      .column {
+          float: left;
+          width: 16%;
+      }
+
+      /* Clear floats after the columns */
+      .row:after {
+          content: "";
+          display: table;
+          clear: both;
+      }
+
+      .button {
+        
+        background-color: rgb(97, 119, 159);
+        border: none;
+        color: white;
+        padding: 15px 45px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+      }
+      .container{  
+      text-align: center; 
+      width: 455px; 
+     
+       
+      }  
+      .startbutton {
+        
+        border: none;
+        color: white;
+        padding: 15px 45px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+   
+      }
+
+      .row{
+        display: flex;
+      }
+
+      
+      .make-background-grey { 
+        background-color: grey;
+        border: none;
+        color: white;
+        padding: 15px 45px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        }
+      
+
+      
+      </style>
+
+  </head>
+
+  <body style="background-color:rgb(209, 209, 209);">
+    
+      <br>
+      <!-- OLINE 4: this is the element I update -->
+      <!--<p id="nat">Demo</p>-->
+   
+
+      <!-- OLINE 2: we need jquery for ajax calls. I download it and import it locally -->
+      <script src="jquery-1.9.1.min.js"></script>
+
+
+      <!-- OLINE 3:i download the csv through an async call and then parse it -->
+      <script>
+          $.ajax({
+          type: "GET",
+          url: "values.csv",
+          dataType: "text",
+          success: parseTxt
+        });
+      </script>
+
+      <div class="row">
+        
+        <!-- left spacing 16% -->
+        <div class="column"></div>
+
+
+
+        <!-- GROUP 1 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 1</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch1" onclick="disableButton(1);">
+              <span class="sliderswitch round"></span>
+            </label>
+
+            <div class="slidecontainer">
+              <span id="slider_value_1" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange1" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,1);">
+            </div>
+            
+          </center>
+        </div>
+
+        <!-- GROUP 2 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 2</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch2" onclick="disableButton(2);">
+              <span class="sliderswitch round"></span>
+            </label>
+            
+            <div class="slidecontainer">
+              <span id="slider_value_2" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange2" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,2);">
+            </div>
+            
+          </center>
+        </div>
+
+        <!-- GROUP 3 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 3</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch3" onclick="disableButton(3);">
+              <span class="sliderswitch round"></span>
+            </label>
+            
+            <div class="slidecontainer">
+              <span id="slider_value_3" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange3" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,3);">
+            </div>
+          </center>
+        </div>
+
+        <!-- GROUP 4 -->
+        <div class="column">
+          <center>
+            <h3 style="font-family:avenir;">Gruppe 4</h3>
+            <label class="switch">
+              <input type="checkbox" id="switch4" onclick="disableButton(4);">
+              <span class="sliderswitch round"></span>
+            </label>
+            
+            <div class="slidecontainer">
+              <span id="slider_value_4" style="color:black; font-size:20px; font-family:avenir;">0 mV</span>
+              <br>
+              <input type="range" min="-1600" max="-500" value="0" class="vertical round" orient="vertical" id="myRange4" style="height: 200px; -webkit-appearance: slider-vertical;
+            writing-mode: bt-lr;" oninput="show_value(this.value,4);">
+            </div>
+          </center>
+        </div>
+
+         <!-- right spacing 16% -->
+        <div class="column"></div>
+      </div>
+
+
+       <!-- START BUTTON -->
+      <table width = "100%" border = "0">
+        <td width = "20%"></td>
+        <td height = "200" width = "60%">
+        <div class="container">
+        
+        <button onclick="startProgram()" type="button" class="startbutton" id="start" style="background-color:#2196F3;">START</button>
+        </div>
+
+        </td> 
+      <td width = "20%"></td>
+    </table>
+
+
+    <!-- SLIDER STYLE -->
+    <style>
+      .slidecontainer {
+        width: 100%;
+      }
+      
+      .slider {
+        -webkit-appearance: none;
+        width:455px;
+        height: 15px;
+        border-radius: 5px;   
+        background:white;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+
+    
+      }
+      
+      
+      .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: rgba(97, 119, 159, 1);
+        cursor: pointer;
+      }
+
+      .sliderDisable {
+        -webkit-appearance: none;
+        width:455px;
+        height: 15px;
+        border-radius: 5px;   
+        background:white;
+        outline: none;
+        opacity: 0.7;
+        -webkit-transition: .2s;
+        transition: opacity .2s;
+      }
+
+      .sliderDisable::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: grey;
+        cursor: pointer;
+      }
+            /* The switch - the box around the slider */
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      /* Hide default HTML checkbox */
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+     
+       /* The slider */
+       .sliderswitch {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      .sliderswitch:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+      }
+
+      input:checked + .sliderswitch {
+        background-color: #2196F3;
+      }
+
+      input:focus + .sliderswitch {
+        box-shadow: 0 0 1px #2196F3;
+      }
+
+      input:checked + .sliderswitch:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      /* Rounded sliders */
+      .sliderswitch.round {
+        border-radius: 34px;
+      }
+
+      .sliderswitch.round:before {
+        border-radius: 50%;
+      }
+      
+      </style>
+
+<script>
+  // spawn_python.js
+
+
+function runPython() {
+    //document.getElementById("p1").innerHTML = "New text!"+Math.random();
+
+    let mv_cabinet1 = window.localStorage.getItem("C1mV");
+    let mv_cabinet2 = window.localStorage.getItem("C2mV");
+    let mv_cabinet3 = window.localStorage.getItem("C3mV");
+    let mv_cabinet4 = window.localStorage.getItem("C4mV");
+    //document.getElementById("p1").innerHTML = mv_cabinet1;
+
+    
+
+    const PID = window.electron.runPython(mv_cabinet1, mv_cabinet2,mv_cabinet3,mv_cabinet4).return;
+    
+    window.localStorage.setItem("PID", PID);
+    //document.getElementById("p1").innerHTML = "Oline hej";
+    //document.getElementById("p1").innerHTML = PID;
+
+    
+
+
+}
+
+function killPython() {
+    const PID = window.localStorage.getItem("PID");
+    window.electron.killPython(PID);
+    const x = window.electron.killPythonHard().return;
+    
+    //document.getElementById("p1").innerHTML = "killed";
+}
+
+  window.api.receive("fromMain", (data) => {
+      console.log(`Received ${data} from main process`);
+  });
+  window.api.send("toMain", "some data");
+</script>
+      
+  </body>
+
+ 
+</html>
+

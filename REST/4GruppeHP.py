@@ -11,6 +11,7 @@ import sys
 import csv
 import datetime
 import time
+import os
 
 from collections import deque
 
@@ -116,6 +117,8 @@ def run(mv1,mv2,mv3,mv4):
         
         
         j=j+4
+       
+        
 
         f = open('values.csv', 'w')
         # create the csv writer
