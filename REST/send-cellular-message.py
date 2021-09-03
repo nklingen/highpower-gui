@@ -57,7 +57,7 @@ while(True):
 
 
     # ----------- Read from file -------------
-    with open('values.csv', newline='') as File:  
+    with open('/home/pi/REST/values.csv', newline='') as File:  
         reader = csv.reader(File)
         for row in reader:
             listdata=row

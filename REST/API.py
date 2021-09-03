@@ -41,7 +41,7 @@ def StartPython():
 
     print(g1,g2,g3,g4)
 
-    p = Popen(['python3', '4GruppeHP.py',g1,g2,g3,g4]) # something long running
+    p = Popen(['python3', '/home/pi/REST/4GruppeHP.py',g1,g2,g3,g4]) # something long running
 
 
     #os.system("python3 4GruppeHP.py "+g1+" "+g2+" "+g3+" "+g4)
@@ -61,7 +61,7 @@ def StopPython():
 
     try:
         p.terminate()
-        #os.system("python3 killPython") #out comment this when running in Linux
+        #os.system("python3 /home/pi/REST/killPython") #out comment this when running in Linux
         return make_response("killed")
     except:
         return make_response("nothing to kill")
@@ -77,7 +77,7 @@ def RequestForecast():
     # To simulate the GET request: http://0.0.0.0:5001/RequestForecast?monitor_id=5201_283_2267
     '''
     
-    with open('values.csv','rt')as f:
+    with open('/home/pi/REST/values.csv','rt')as f:
         data = csv.reader(f)
         txt = ""
         for row in data:
