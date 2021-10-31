@@ -14,49 +14,15 @@
       // spawn_python.js
 
 
-function runPython() {
-    //document.getElementById("p1").innerHTML = "New text!"+Math.random();
-
-    let mv_cabinet1 = window.localStorage.getItem("C1mV");
-    let mv_cabinet2 = window.localStorage.getItem("C2mV");
-    let mv_cabinet3 = window.localStorage.getItem("C3mV");
-    let mv_cabinet4 = window.localStorage.getItem("C4mV");
-    //document.getElementById("p1").innerHTML = mv_cabinet1;
-
-    
-
-    const PID = window.electron.runPython(mv_cabinet1, mv_cabinet2,mv_cabinet3,mv_cabinet4).return;
-    
-    window.localStorage.setItem("PID", PID);
-    //document.getElementById("p1").innerHTML = "Oline hej";
-    //document.getElementById("p1").innerHTML = PID;
-
-    
-
-
-}
-
-function killPython() {
-    const PID = window.localStorage.getItem("PID");
-    window.electron.killPython(PID);
-    const x = window.electron.killPythonHard().return;
-    
-    //document.getElementById("p1").innerHTML = "killed";
-}
 
 
       $(document).ready(function() {
         setInterval(function() {
-          refresh_csv()
-        }, 3000);
+          refresh_data()
+        }, 60000);
       });
       
-      function refresh_csv() {
-        //window.location.reload(true); 
-        var loc = window.localStorage.getItem("loc");
-        
-
-
+      function refresh_data() {
         const Http = new XMLHttpRequest();
         const url='http://0.0.0.0:5001/RequestValues';
         Http.open("GET", url);
@@ -65,6 +31,26 @@ function killPython() {
         Http.onreadystatechange = (e) => {
           parseTxt(Http.responseText)
 }
+
+      }
+
+    
+      function send_data() {
+        var today = new Date();
+        var date = today.getDate()+'/'+(today.getMonth()+1)+'/'+today.getFullYear();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date+' '+time;
+        //var dateTime = today.getDate()
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://0.0.0.0:5001/SendData");
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+          'timestamp':dateTime,
+          'anlage':anlægsnummer,
+          'code':"OK START",
+      
+        }));
 
 
 
@@ -78,6 +64,7 @@ function killPython() {
       } 
       // OLINE 1: SPLITS csv INPUT INTO A VARIABLE FOR EACH CABINET
       function parseTxt(text){
+   
         var val = text.split(',');
         
 
@@ -97,8 +84,32 @@ function killPython() {
         }
       }
 
+      //STORE REBOOT VALUE
+      function storeReboot(status) {
+        let mv_cabinet1 = window.localStorage.getItem("C1mV");
+        let mv_cabinet2 = window.localStorage.getItem("C2mV");
+        let mv_cabinet3 = window.localStorage.getItem("C3mV");
+        let mv_cabinet4 = window.localStorage.getItem("C4mV");
+        let anlægsnummer = window.localStorage.getItem("anlægsnummer");
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://0.0.0.0:5001/WriteToDb");
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+          "anlægsnummer":anlægsnummer,
+          "gruppe1": mv_cabinet1,
+          "gruppe2": mv_cabinet2,
+          "gruppe3": mv_cabinet3,
+          "gruppe4": mv_cabinet4,
+          "reboot_status":status,
+          
+      }));
+
+      }
+
       function stopProgram() {
         //Stop Program;
+        
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "http://0.0.0.0:5001/StopPython");
         xhr.setRequestHeader('Content-Type', 'application/json');
@@ -106,22 +117,20 @@ function killPython() {
            
             
         }));
+        storeReboot("index");
         window.location.href = "index.html";
     }
 
       function load() {
         
-        var loc = (window.location.pathname);
-        var loc2 = loc.substring(0,loc.lastIndexOf("/")); //Go back 1
-        var loc3 = loc2.substring(0,loc2.lastIndexOf("/")); //Go back 1
-        document.getElementById("p1").innerHTML = loc;
-        window.localStorage.setItem("loc", loc3+"/extraResources");
-        	
-
-
+        
+        send_data();
+        
+        let anlægsnummer = window.localStorage.getItem("anlægsnummer");
+        document.getElementById("anlægsnummer").innerHTML = anlægsnummer;
 
         for (let i = 1; i <= 4; i++) {
-
+          
           if (window.localStorage.getItem("C"+i+"Switch")!="false") {
           //document.getElementById(i+"mV").innerHTML = "loading..";
           document.getElementById(i+"target").innerHTML = "Target: "+window.localStorage.getItem("C"+i+"mV")+" mV";
@@ -250,13 +259,17 @@ function killPython() {
 
 
   </head>
-  <p id="p1">HI</p>
+  
   <body style="background-color:rgb(209, 209, 209);">
     <center>
       <h2 style="font-family:avenir;">High Power Cabinet</h2>
-      <p style="font-family:avenir; margin:0; padding:0">developed for Guldager A/S by Staerkling Consulting</p>
-      <p style="font-family:avenir; margin:0; padding:0">contact Thomas Vartou for questions</p>
+      <!--<p style="font-family:avenir; margin:0; padding:0">developed for Guldager A/S by Staerkling Consulting</p>
+      <p style="font-family:avenir; margin:0; padding:0">contact Thomas Vartou for questions</p>-->
     </center>
+      
+      <center>
+       <a id="anlægsnummer" style= "font-family: avenir;">anlægsnummer</a>
+      </center>
       <br>
     
       <table width = "100%" border = "0">
@@ -269,38 +282,42 @@ function killPython() {
           <div>
             <div class="container" id="container">
                 <div class="row" id="0">
+
                     <div class="box-green" id="box1">
                         <a class="cabinetFont">Gruppe 1</a>
-                        <br>
-                      <p id="1mV">N/A</p>
-                      <br>
+                        <br><br>
+                      <a id="1mV">N/A</a>
+                      <br><br>
                       <a id="1target">N/A</a>
+                      <br><br>
 
-                
                     </div>
                     <div class = "box-green" id="box2">
                         <a class="cabinetFont">Gruppe 2</a>
-                        <br>
+                        <br><br>
                       <a id="2mV">N/A</a>
-                      <br>
+                      <br><br>
                       <a id="2target">N/A</a>
+                      <br><br>
 
                     </div>
                     <div class = "box-green" id="box3">
                       <a class="cabinetFont">Gruppe 3</a>
-                      <br>
+                      <br><br>
                       <a id="3mV">N/A</a>
-                      <br>
+                      <br><br>
                       <a id="3target">N/A</a>
+                      <br><br>
 
           
                   </div>
                   <div class = "box-green" id="box4">
                     <a class="cabinetFont">Gruppe 4</a>
-                      <br>
+                      <br><br>
                       <a id="4mV">N/A</a>
-                      <br>
+                      <br><br>
                       <a id="4target">N/A</a>
+                      <br><br>
 
         
                 </div>
@@ -320,13 +337,18 @@ function killPython() {
 
 
         </td> 
+        
       <td width = "20%"></td>
     </table>
+
+    
       <br>
       <br>
+
+      
       <center>
 
-        <img src = "logo.png" width="70" height="70" />
+        <img src = "logo.png" width="400"  />
       </center>
     
 

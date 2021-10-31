@@ -8,7 +8,6 @@
     "linux": {
       "target": "AppImage"
     }
-    
   },
   "scripts": {
     "start": "electron ."
@@ -30,6 +29,7 @@
   "dependencies": {
     "auto-launch": "^5.0.5",
     "make": "^0.8.1",
-    "python-shell": "^3.0.0"
+    "python-shell": "^3.0.0",
+    "simple-keyboard": "^3.3.7"
   }
 }

@@ -17,7 +17,6 @@ function createWindow () {
   win.loadFile('index.html')
 
 
-
 }
 
 // Quit the app when all windows are closed (Windows & Linux)
@@ -50,4 +49,8 @@ app.whenReady().then(() => {
   })
   
 })
+
+process.on('exit', () => {
+  app.quit();
+});
 

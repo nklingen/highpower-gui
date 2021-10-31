@@ -2,6 +2,7 @@
 <html>
   <!-- set the viewport of your page, which will give the browser instructions on how to control the page's dimensions and scaling. -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <head>
 
     
@@ -13,41 +14,40 @@
     <!-- DYNAMIC SLIDER  VALUE -->
    
     <script>
-      
-
-      
-
-      function test() {
-
   
-
-     
-        //document.getElementById("p1").innerHTML = "New text!"+Math.random();
-   
-        //Load in last chosen values
-        show_value(window.localStorage.getItem("C"+1+"mV"),1);
-        show_value(window.localStorage.getItem("C"+2+"mV"),2);
-        show_value(window.localStorage.getItem("C"+3+"mV"),3);
-        show_value(window.localStorage.getItem("C"+4+"mV"),4);
-
-        switchOff(1,window.localStorage.getItem("C1Switch"));
-        switchOff(2,window.localStorage.getItem("C2Switch"));
-        switchOff(3,window.localStorage.getItem("C3Switch"));
-        switchOff(4,window.localStorage.getItem("C4Switch"));
-
-
+function storeReboot(status) {
+        let mv_cabinet1 = window.localStorage.getItem("C1mV");
+        let mv_cabinet2 = window.localStorage.getItem("C2mV");
+        let mv_cabinet3 = window.localStorage.getItem("C3mV");
+        let mv_cabinet4 = window.localStorage.getItem("C4mV");
+        let anlægsnummer = window.localStorage.getItem("anlægsnummer");
         
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://0.0.0.0:5001/WriteToDb");
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+          "anlægsnummer":anlægsnummer,
+          "gruppe1": mv_cabinet1,
+          "gruppe2": mv_cabinet2,
+          "gruppe3": mv_cabinet3,
+          "gruppe4": mv_cabinet4,
+          "reboot_status":status,
+          
+          
+      }));
 
       }
 
-      function startProgram() {
+function runPython() {
       
       //start program here
+      //storeReboot("status")
 
       let mv_cabinet1 = window.localStorage.getItem("C1mV");
       let mv_cabinet2 = window.localStorage.getItem("C2mV");
       let mv_cabinet3 = window.localStorage.getItem("C3mV");
       let mv_cabinet4 = window.localStorage.getItem("C4mV");
+      let anlægsnummer = window.localStorage.getItem("anlægsnummer");
   
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "http://0.0.0.0:5001/StartPython");
@@ -57,14 +57,106 @@
           "gruppe2": mv_cabinet2,
           "gruppe3": mv_cabinet3,
           "gruppe4": mv_cabinet4,
+          "anlægsnummer": anlægsnummer,
           
       }));
-      
-      
       window.location.href = "status.html";
 
+
+    }
+
+  
+    
+
+      // Restarting program on reboot !!
+      /////////////////////////
+
+      function checkStatus(text) {
+        
+
+        var val = text.split(',');
       
+        window.localStorage.setItem("anlægsnummer", val[0]);
+        window.localStorage.setItem("C1mV", parseInt(val[1]));
+        window.localStorage.setItem("C2mV",parseInt(val[2]));
+        window.localStorage.setItem("C3mV",parseInt(val[3]));
+        window.localStorage.setItem("C4mV",parseInt(val[4]));
+        window.localStorage.setItem("reboot_status",val[5]);
+
+        let status = val[5];
+   
+        
+        if (status.trim()==="status") {
+
+          runPython();
+        }
+        else {
+          
+          window.onload = load();
+        }
+        
+        
+        
       }
+
+      
+      //Gets latest saved data from the database
+      function getInput() {
+        const Http = new XMLHttpRequest();
+        const url='http://0.0.0.0:5001/GetFromDb';
+        Http.open("GET", url);
+        Http.send();
+
+        Http.onreadystatechange = (e) => {
+          checkStatus(Http.responseText)
+}
+
+      }
+      
+
+      function load() {
+        
+        
+        let mv_cabinet1 = window.localStorage.getItem("C1mV");
+        let mv_cabinet2 = window.localStorage.getItem("C2mV");
+        let mv_cabinet3 = window.localStorage.getItem("C3mV");
+        let mv_cabinet4 = window.localStorage.getItem("C4mV");
+        let reboot_status = window.localStorage.getItem("reboot_status");
+        let anlægsnummer = window.localStorage.getItem("anlægsnummer");
+
+        document.getElementById('text').value=anlægsnummer;
+       
+
+   
+        //Load in last chosen values
+        show_value(mv_cabinet1,1);
+        show_value(mv_cabinet2,2);
+        show_value(mv_cabinet3,3);
+        show_value(mv_cabinet4,4);
+
+        switchOff(1,(mv_cabinet1!=0).toString());
+        switchOff(2,(mv_cabinet2!=0).toString());
+        switchOff(3,(mv_cabinet3!=0).toString());
+        switchOff(4,(mv_cabinet4!=0).toString());
+
+       
+      
+        
+
+      }
+
+      function startProgram() {
+
+      window.location.href = "login2.html";
+
+  
+      }
+      function editAnlægsnummer() {
+
+    window.location.href = "anlægsnummer2.html";
+
+
+    }
 
       function storemV(c,w) {
         window.localStorage.setItem("C"+c+"mV", w);
@@ -87,22 +179,25 @@
         var cab3 = val[2];
         var cab4 = val[3];
  
-        //document.getElementById("nat").innerHTML = cab3;
+
       }
 
       function switchOff(c,value) {
-        //document.getElementById("p1").innerHTML = value;
+        
         if (value=="false") {
         
-        //document.getElementById("p1").innerHTML = 1;
+  
         document.getElementById("switch"+c).checked = false;
+        
+        
+      
         disableButton(c);
         
         
       }
         else {
           
-          //document.getElementById("p1").innerHTML = "2";
+          
           document.getElementById("switch"+c).checked = true;
         }
         
@@ -121,8 +216,7 @@
         elemchecked = document.getElementById("switch"+c).checked;
         document.getElementById("myRange"+c).disabled = false;
         
-        //document.getElementById("p1").innerHTML = c+" "+Math.random();
-
+      
         if (!elemchecked) {
           document.getElementById("myRange"+c).disabled = true;
           document.getElementById("myRange"+c).value  = 0;
@@ -134,8 +228,8 @@
         }
       
     }
-
-    window.onload = test;
+    getInput();
+    
     </script>
 
     <style>
@@ -180,10 +274,11 @@
         text-decoration: none;
         display: inline-block;
         font-size: 16px;
-        margin: 4px 2px;
+        margin: 4px 4px;
         cursor: pointer;
    
       }
+     
 
       .row{
         display: flex;
@@ -212,8 +307,11 @@
   <body style="background-color:rgb(209, 209, 209);">
     
       <br>
+      
+      
       <!-- OLINE 4: this is the element I update -->
-      <!--<p id="nat">Demo</p>-->
+      <!--">Demo</p>-->
+      <p id="p1"></p>
    
 
       <!-- OLINE 2: we need jquery for ajax calls. I download it and import it locally -->
@@ -230,7 +328,12 @@
         });
       </script>
 
+      
+      
+   
+
       <div class="row">
+        
         
         <!-- left spacing 16% -->
         <div class="column"></div>
@@ -320,14 +423,29 @@
       <table width = "100%" border = "0">
         <td width = "20%"></td>
         <td height = "200" width = "60%">
-        <div class="container">
         
-        <button onclick="startProgram()" type="button" class="startbutton" id="start" style="background-color:#2196F3;">START</button>
-        </div>
+        
+       
+        <center>
+          <div class="container">
+        
+            <button onclick="startProgram()" type="button" class="startbutton" id="start" style="background-color:#2196F3;">START</button>
+            </div>
+            <br>
+          <input id="text" onclick="editAnlægsnummer()" type="text" readonly="readonly">
+        </center>
+        
+
 
         </td> 
+        
+        
       <td width = "20%"></td>
     </table>
+
+    
+
+    
 
 
     <!-- SLIDER STYLE -->
@@ -449,40 +567,14 @@
       </style>
 
 <script>
-  // spawn_python.js
 
 
-function runPython() {
-    //document.getElementById("p1").innerHTML = "New text!"+Math.random();
-
-    let mv_cabinet1 = window.localStorage.getItem("C1mV");
-    let mv_cabinet2 = window.localStorage.getItem("C2mV");
-    let mv_cabinet3 = window.localStorage.getItem("C3mV");
-    let mv_cabinet4 = window.localStorage.getItem("C4mV");
-    //document.getElementById("p1").innerHTML = mv_cabinet1;
-
-    
-
-    const PID = window.electron.runPython(mv_cabinet1, mv_cabinet2,mv_cabinet3,mv_cabinet4).return;
-    
-    window.localStorage.setItem("PID", PID);
-    //document.getElementById("p1").innerHTML = "Oline hej";
-    //document.getElementById("p1").innerHTML = PID;
-
-    
 
 
-}
 
-function killPython() {
-    const PID = window.localStorage.getItem("PID");
-    window.electron.killPython(PID);
-    const x = window.electron.killPythonHard().return;
-    
-    //document.getElementById("p1").innerHTML = "killed";
-}
 
-  window.api.receive("fromMain", (data) => {
+
+window.api.receive("fromMain", (data) => {
       console.log(`Received ${data} from main process`);
   });
   window.api.send("toMain", "some data");
@@ -492,4 +584,6 @@ function killPython() {
 
  
 </html>
+
+
 

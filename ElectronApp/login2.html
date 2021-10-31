@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+
+<html>
+
+
+
+<script> 
+
+
+
+// STORE REBOOT VALUES
+      /////////////////////////
+      function storeReboot(status) {
+        let mv_cabinet1 = window.localStorage.getItem("C1mV");
+        let mv_cabinet2 = window.localStorage.getItem("C2mV");
+        let mv_cabinet3 = window.localStorage.getItem("C3mV");
+        let mv_cabinet4 = window.localStorage.getItem("C4mV");
+        let anlægsnummer = window.localStorage.getItem("anlægsnummer");
+        
+          
+        
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "http://0.0.0.0:5001/WriteToDb");
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({
+          "anlægsnummer":anlægsnummer,
+          "gruppe1": mv_cabinet1,
+          "gruppe2": mv_cabinet2,
+          "gruppe3": mv_cabinet3,
+          "gruppe4": mv_cabinet4,
+          "reboot_status":status,
+          
+      }));
+
+      }
+
+function startProgram() {
+      
+      //start program here
+      storeReboot("status");
+
+      let mv_cabinet1 = window.localStorage.getItem("C1mV");
+      let mv_cabinet2 = window.localStorage.getItem("C2mV");
+      let mv_cabinet3 = window.localStorage.getItem("C3mV");
+      let mv_cabinet4 = window.localStorage.getItem("C4mV");
+      let anlægsnummer = window.localStorage.getItem("anlægsnummer");
+        
+  
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "http://0.0.0.0:5001/StartPython");
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify({
+          "gruppe1": mv_cabinet1,
+          "gruppe2": mv_cabinet2,
+          "gruppe3": mv_cabinet3,
+          "gruppe4": mv_cabinet4,
+          "anlægsnummer":anlægsnummer,
+          
+      }));
+      window.location.href = "status.html";
+
+
+    }
+
+
+
+function checkCode() {
+  
+  if (document.getElementById('password').value == '4711') {
+    startProgram();
+  }
+
+}
+    
+(function() {
+   'use strict';
+   var i,c;
+function init(){ 
+   i=document.getElementById('pinpad').getElementsByTagName('input');
+for(c=0;c<i.length;c++) {
+if(i[c].type==='button') {
+   i[c].addEventListener('onclick',makeClickHandler(c));
+   }
+  }
+
+document.getElementById('clear').onclick=function() {
+   document.getElementById('password').value='';
+   
+   
+  }
+  document.getElementById('enter').onclick=function() {
+    checkCode();
+   
+   
+  }
+  document.getElementById('return').onclick=function() {
+   window.location.href="index.html";
+   
+   
+  }
+
+  
+
+ }
+
+function makeClickHandler(c) {
+   i[c].onclick=function() {
+
+   document.getElementById('password').value+=this.value.toLowerCase();
+  };
+ }
+
+   window.addEventListener?
+   window.addEventListener('load',init,false):
+   window.attachEvent('onload',init);
+})();
+
+    
+    </script>
+    <body style="background-color:rgb(209, 209, 209);">
+
+    <div id="pinpad"> 
+        <form >
+          <input type="password" id="password"/></br>
+          <input type="button" value="1" id="1" class="pinButton calc"/>
+          <input type="button" value="2" id="2" class="pinButton calc"/>
+          <input type="button" value="3" id="3" class="pinButton calc"/><br>
+          <input type="button" value="4" id="4" class="pinButton calc"/>
+          <input type="button" value="5" id="5" class="pinButton calc"/>
+          <input type="button" value="6" id="6" class="pinButton calc"/><br>
+          <input type="button" value="7" id="7" class="pinButton calc"/>
+          <input type="button" value="8" id="8" class="pinButton calc"/>
+          <input type="button" value="9" id="9" class="pinButton calc"/><br>
+          <input type="button" value="clear" id="clear" class="pinButton clear"/>
+          <input type="button" value="0" id="0 " class="pinButton calc"/>
+          <input type="button" value="OK" id="enter" class="pinButton enter"/><br>
+          <input type="button" value="back" id="return" class="pinButton clear"/><br>
+       
+        </form>
+      </div>
+
+
+    
+</html>
+</body>
+<style>
+
+form {
+  width: 390px;
+  margin: 50px auto;
+  background: #fff;
+  padding: 35px 25px;
+  text-align: center;
+  box-shadow: 0px 5px 5px -0px rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+}
+
+input[type="password"] {
+  padding: 0 40px;
+  border-radius: 5px;
+  width: 300px;
+  margin: auto;
+  border: 1px solid rgb(228, 220, 220);
+  outline: none;
+  font-size: 60px;
+  color: transparent;
+  text-shadow: 0 0 0 rgb(71, 71, 71);
+  text-align: center;
+}
+
+input:focus {
+  outline: none;
+}
+
+.pinButton {
+  border: none;
+  background: none;
+  font-size: 1.5em;
+  border-radius: 50%;
+  height: 60px;
+  font-weight: 550;
+  width: 60px;
+  color: transparent;
+  text-shadow: 0 0 0 rgb(102, 101, 101);
+  margin: 7px 20px;
+}
+
+.clear,
+.enter {
+  font-size: 1em !important;
+}
+
+.pinButton:hover {
+  box-shadow: #506ce8 0 0 1px 1px;
+}
+.pinButton:active {
+  background: #506ce8;
+  color: #fff;
+}
+
+.clear:hover {
+  box-shadow: #ff3c41 0 0 1px 1px;
+}
+
+.clear:active {
+  background: #ff3c41;
+  color: #fff;
+}
+
+.enter:hover {
+  box-shadow: #47cf73 0 0 1px 1px;
+}
+
+.enter:active {
+  background: #47cf73;
+  color: #fff;
+}
+
+</style>
